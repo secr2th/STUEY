@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
 </head>
 <body>
     <div id="app">
@@ -19,22 +28,95 @@
         </header>
 
         <main id="main-content">
-            <section id="view-onboarding" class="view active">
+            <section id="view-onboarding" class="view">
                 <h1>시작하기</h1>
-                <p class="subtitle">AI 튜터와 연결하고 실력을 진단해요.</p>
+                <p class="subtitle">AI 튜터에게 현재 실력을 알려주세요.</p>
                 
                 <div class="card">
                     <label>Gemini API Key</label>
                     <input type="password" id="api-key-input" placeholder="AI 키를 입력하세요">
+                    <p class="input-guide">🔑 키는 내 기기에만 저장됩니다.</p>
                 </div>
 
                 <div class="card">
-                    <h3>실력 체크리스트</h3>
+                    <h3>실력 진단</h3>
                     <form id="skill-form">
                         </form>
                 </div>
                 <button id="btn-start-analysis" class="btn-primary">분석 및 플랜 생성</button>
             </section>
+
+            <section id="view-dashboard" class="view">
+                <div class="greeting">
+                    <h2 id="greeting-text">안녕하세요! 👋</h2>
+                    <p id="quote-text">오늘의 크리에이티브 한 스푼</p>
+                </div>
+
+                <div class="card chart-card">
+                    <h3>나의 능력치</h3>
+                    <canvas id="skillChart"></canvas>
+                </div>
+
+                <div class="card timer-card">
+                    <div class="timer-text">
+                        <span class="timer-label">집중 모드</span>
+                        <div class="timer-display">25:00</div>
+                    </div>
+                    <button id="btn-timer-toggle" class="btn-icon-play"><span class="material-icons-round">play_arrow</span></button>
+                </div>
+
+                <h3>오늘의 퀘스트</h3>
+                <ul id="daily-tasks" class="task-list"></ul>
+
+                <h3>AI 튜터 피드백</h3>
+                <div id="ai-feedback" class="card feedback-card"></div>
+            </section>
+
+            <section id="view-gallery" class="view">
+                <h2>나의 아틀리에</h2>
+                <button id="btn-upload-art" class="btn-secondary">+ 그림 기록하기</button>
+                <input type="file" id="file-input" accept="image/*" hidden>
+                <div id="gallery-grid" class="gallery-grid"></div>
+            </section>
+            
+            <section id="view-settings" class="view">
+                <h2>설정</h2>
+                
+                <div class="card">
+                    <h3>앱 테마 색상</h3>
+                    <div class="color-palette" id="color-palette">
+                        </div>
+                </div>
+
+                <div class="card">
+                    <h3>학습 관리</h3>
+                    <button id="btn-reassess" class="btn-secondary">실력 재평가 & 플랜 다시 짜기</button>
+                    <p class="input-guide">실력이 늘었다면 다시 평가해보세요!</p>
+                </div>
+
+                <div class="card">
+                    <h3>데이터</h3>
+                    <button id="btn-reset" class="btn-danger">초기화 (모든 데이터 삭제)</button>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-target="view-dashboard"><span class="material-icons-round">home</span>홈</button>
+            <button class="nav-btn" data-target="view-gallery"><span class="material-icons-round">collections</span>기록</button>
+            <button class="nav-btn" data-target="view-settings"><span class="material-icons-round">settings</span>설정</button>
+        </nav>
+    </div>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">AI가 분석 중입니다...</p>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
+
 
             <section id="view-dashboard" class="view">
                 <div class="greeting">
